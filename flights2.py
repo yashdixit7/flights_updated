@@ -38,6 +38,18 @@ with col2:
 with col3:
     selected_flight_numbers = st.multiselect("Select Flight Numbers:", df['Flight Number'].tolist())
 
+# Use st.form to capture user input
+with st.form(key='flight_input_form'):
+    # Checkbox column
+    checkbox_col = st.checkbox("", key='dummy_checkbox', value=False, visible=False)
+    # Submit button
+    submit_button = st.form_submit_button(label='Submit')
+
+# Check if the checkbox is selected
+if checkbox_col:
+    # Update the selected flight numbers with the checkbox value
+    selected_flight_numbers.append(checkbox_col)
+
 if st.button("Generate Pattern"):
     if selected_flight_numbers and start_date and end_date:
         flight_patterns = []
