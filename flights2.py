@@ -36,7 +36,7 @@ with col2:
     end_date = st.date_input("Select End Date:")
 
 with col3:
-    selected_flight_numbers = st.multiselect("Select Flight Numbers:", df['Flight Number'].tolist(), [])
+    selected_flight_numbers = st.multiselect("Select Flight Numbers:", df['Flight Number'].tolist())
 
 if st.button("Generate Pattern"):
     if selected_flight_numbers and start_date and end_date:
@@ -50,7 +50,7 @@ if st.button("Generate Pattern"):
 
 st.write("All Available Flight Information:")
 df_display = pd.DataFrame({
-    'Checkbox': [st.checkbox("", value=False, key=f"checkbox_{i}") for i, _ in enumerate(df['Flight Number'])],
+    'Checkbox': [st.checkbox("", key=f"checkbox_{i}") for i, _ in enumerate(df['Flight Number'])],
     'Flight Number': df['Flight Number'],
     'Start Date': df['Start Date'],
     'End Date': df['End Date'],
