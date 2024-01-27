@@ -16,7 +16,7 @@ def generate_flight_pattern(flight_number, start_date, end_date):
     return pattern
 
 data = {
-    'Flight Number': ['ABC123', 'XYZ746', 'PQR777'],
+    'Flight Number': ['ABC123', 'XYZ456', '123XYZ'],
     'Start Date': ['12-01-2024', '15-01-2024', '10-01-2024'],
     'End Date': ['25-01-2024', '20-01-2024', '18-01-2024'],
     'Additional Info': ['Info1', 'Info2', 'Info3'],
@@ -24,34 +24,41 @@ data = {
 
 df = pd.DataFrame(data)
 
-st.title("FLIGHTS PATTERNS")
-col1, col2, col3 = st.columns(3)
-with col1:
-    selected_flight_numbers = st.multiselect("Select Flight Code:", df['Flight Number'].tolist())
-with col2:
-     start_date = st.date_input("Select Start Date:")
-with col3:
-    end_date = st.date_input("Select End Date:")
-   
-    
+st.title("Flight Pattern Generator")
 
-if st.button("SUBMIT"):
+# Arrange input fields in a single row using st.columns
+col1, col2, col3 = st.columns(3)
+
+with col1:
+    start_date = st.date_input("Select Start Date:")
+
+with col2:
+    end_date = st.date_input("Select End Date:")
+
+with col3:
+    selected_flight_numbers = st.multiselect("Select Flight Numbers:", df['Flight Number'].tolist(), [])
+
+if st.button("Generate Pattern"):
     if selected_flight_numbers and start_date and end_date:
         flight_patterns = []
         for flight_number in selected_flight_numbers:
             pattern = generate_flight_pattern(flight_number, start_date, end_date)
             flight_patterns.append(pattern)
-            st.success(f"Flight information - : {pattern}")
+            st.success(f"Flight Pattern for {flight_number}: {pattern}")
     else:
         st.warning("Please fill in all the required fields.")
 
-st.write("Flight Information:")
+st.write("All Available Flight Information:")
 df_display = pd.DataFrame({
-    'Checkbox': [flight_number in selected_flight_numbers for flight_number in df['Flight Number']],
+    'Checkbox': [st.checkbox("", value=False, key=f"checkbox_{i}") for i, _ in enumerate(df['Flight Number'])],
     'Flight Number': df['Flight Number'],
     'Start Date': df['Start Date'],
     'End Date': df['End Date'],
     'Additional Info': df['Additional Info']
 })
 
+selected_flight_numbers = [flight_number for i, flight_number in enumerate(df['Flight Number']) if df_display['Checkbox'][i]]
 st.dataframe(df_display[['Checkbox', 'Flight Number', 'Start Date', 'End Date', 'Additional Info']])
+
+# Use the selected_flight_numbers as needed
+st.write("Selected Flight Numbers:", selected_flight_numbers)
