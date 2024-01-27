@@ -41,7 +41,7 @@ with col3:
 # Use st.form to capture user input
 with st.form(key='flight_input_form'):
     # Checkbox column
-    checkbox_col = st.checkbox("", key='dummy_checkbox', value=False, visible=False)
+    checkbox_col = st.checkbox("", key='dummy_checkbox', value=False)
     # Submit button
     submit_button = st.form_submit_button(label='Submit')
 
